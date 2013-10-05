@@ -5,7 +5,7 @@
 //  Copyright (c) 2013 Kasper Timm Hansen. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>;
+#import <Foundation/Foundation.h>
 
 typedef void(^CVConfigureTableViewCellHandler)(id cell, id object);
 typedef void(^CVTableViewDidSelectRowAtIndexPath)(NSIndexPath *indexPath, id object);
