@@ -37,16 +37,6 @@
 
 #pragma mark -
 
-- (void)setObjects:(NSArray *)objects
-{
-    if (_objects == objects)
-        return;
-
-    _objects = objects;
-}
-
-#pragma mark -
-
 - (void)reloadVisibleCells
 {
     [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
