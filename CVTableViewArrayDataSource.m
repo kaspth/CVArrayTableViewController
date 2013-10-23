@@ -35,6 +35,18 @@
     return self;
 }
 
+- (instancetype)initWithTableView:(UITableView *)tableView editableObjects:(NSMutableArray *)editableObjects
+{
+    return [self initWithTableView:tableView objects:editableObjects];
+}
+
+#pragma mark -
+
+- (BOOL)objectsAreEditable
+{
+    return _objectsAreEditable ?: (_objectsAreEditable = [self.objects isKindOfClass:[NSMutableArray class]]);
+}
+
 #pragma mark -
 
 - (void)reloadVisibleCells
@@ -72,6 +84,25 @@
     return cell;
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.objectsAreEditable && self.canEditRowHandler)
+        return self.canEditRowHandler(indexPath, [self objectForIndexPath:indexPath]);
+    
+    return NO;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle != UITableViewCellEditingStyleDelete && !self.didDeleteRowHandler)
+        return;
+    
+    id object = [self removeObjectAtIndexPath:indexPath];
+    [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    
+    self.didDeleteRowHandler(indexPath, object);
+}
+
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -92,6 +123,18 @@
 - (NSArray *)objectsForSectionIndex:(NSInteger)section
 {
     return self.sections ? self.objects[section] : self.objects;
+}
+
+- (id)removeObjectAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSMutableArray *editableObjects = (NSMutableArray *)[self objectsForSectionIndex:indexPath.section];
+    if (indexPath.row >= [editableObjects count])
+        return;
+    
+    id object = editableObjects[indexPath.row];
+    [editableObjects removeObjectAtIndex:indexPath.row];
+    
+    return object;
 }
 
 - (UITableView *)shouldDequeueFromTableView:(UITableView *)tableView

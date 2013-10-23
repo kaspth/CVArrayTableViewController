@@ -8,8 +8,9 @@
 #import <Foundation/Foundation.h>
 
 typedef void(^CVConfigureTableViewCellHandler)(id cell, id object);
-typedef void(^CVTableViewDidSelectRowAtIndexPath)(NSIndexPath *indexPath, id object);
+typedef void(^CVTableViewRowAtIndexPathHandler)(NSIndexPath *indexPath, id object);
 typedef UITableView *(^CVDequeueFromTableViewHandler)(UITableView *tableView);
+typedef BOOL(^CVCanEditRowAtIndexPathHandler)(NSIndexPath *indexPath, id object);
 
 @interface CVTableViewArrayDataSource : NSObject <UITableViewDataSource, UITableViewDelegate>
 
@@ -31,13 +32,25 @@ typedef UITableView *(^CVDequeueFromTableViewHandler)(UITableView *tableView);
 
 ///@brief The block to call when a row is selected
 ///@discussion if not set, the row will be deselected automatically.
-@property (nonatomic, copy) CVTableViewDidSelectRowAtIndexPath didSelectRowHandler;
+@property (nonatomic, copy) CVTableViewRowAtIndexPathHandler didSelectRowHandler;
 
 ///@brief Use this to act as the delegate of a tableView which doesn't have a reference to the cell with the passed in cellIdentifier.
 ///@discussion Ideal for UISearchResultsDataSource to reuse the cells from another tableView.
 @property (nonatomic, copy) CVDequeueFromTableViewHandler dequeueFromTableViewHandler;
 
+///@brief YES if objects are a mutable array, NO otherwise.
+///@discussion Set to NO if data source shouldn't support editing.
+@property (nonatomic) BOOL objectsAreEditable;
+
+@property (nonatomic, copy) CVCanEditRowAtIndexPathHandler canEditRowHandler;
+
+///@brief Called if the data source supports editing and the user deleted a row.
+@property (nonatomic, copy) CVTableViewRowAtIndexPathHandler didDeleteRowHandler;
+
 - (instancetype)initWithTableView:(UITableView *)tableView;
+
+///@param objects Passing a mutable array makes the table view data source support deletion of rows.
+///@discussion Override objectsAreEditable if this automatic behavior is not wanted.
 - (instancetype)initWithTableView:(UITableView *)tableView objects:(NSArray *)objects;
 
 - (void)reloadVisibleCells;
