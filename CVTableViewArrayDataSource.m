@@ -129,7 +129,7 @@
 {
     NSMutableArray *editableObjects = (NSMutableArray *)[self objectsForSectionIndex:indexPath.section];
     if (indexPath.row >= [editableObjects count])
-        return;
+        return nil;
     
     id object = editableObjects[indexPath.row];
     [editableObjects removeObjectAtIndex:indexPath.row];
