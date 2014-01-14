@@ -19,25 +19,25 @@ Subclass `CVTableViewArrayDataSource`. Set or override `objects`, `cellIdentifie
 Like this:
 
 ```objc
-  #import "CVArrayTableViewController.h"
-  
-  ...
-  @interface Subclass : CVArrayTableViewController
-  @end
+#import "CVArrayTableViewController.h"
 
-  // in your .m file:
-  - (NSArray *)objects
-  {
-      return @[@"A cat", @"A hat", @"And", @"A band"];
-  }
-  
-  - (void)viewDidLoad
-  {
-      self.tableViewDataSource.cellIdentifier = @"UniqueCellIdentifier";
-      self.tableViewDataSource.cellConfigurationHandler = ^(UITableViewCell *cell, NSString *title) {
-          cell.textLabel.text = title;
-      };
-  }
+@interface Subclass : CVArrayTableViewController
+@end
+
+// in your .m file:
+- (NSArray *)objects
+{
+    return @[@"A cat", @"A hat", @"And", @"A band"];
+}
+
+- (void)viewDidLoad
+{
+    // The properties can also be set instead of overriding them.
+    self.tableViewDataSource.cellIdentifier = @"UniqueCellIdentifier";
+    self.tableViewDataSource.cellConfigurationHandler = ^(UITableViewCell *cell, NSString *title) {
+        cell.textLabel.text = title;
+    };
+}
 ```
 
 Notice the `NSString *title` above. The objects in the array are automatically passed to your `cellConfigurationHandler` as an id.
