@@ -1,10 +1,3 @@
-//
-//  CVTableViewArrayDataSource.h
-//
-//  Created by Kasper Timm on 11/09/13.
-//  Copyright (c) 2013 Kasper Timm Hansen. All rights reserved.
-//
-
 #import <Foundation/Foundation.h>
 
 typedef void(^CVConfigureTableViewCellHandler)(id cell, id object);
@@ -12,7 +5,7 @@ typedef void(^CVTableViewRowAtIndexPathHandler)(NSIndexPath *indexPath, id objec
 typedef UITableView *(^CVDequeueFromTableViewHandler)(UITableView *tableView);
 typedef BOOL(^CVCanEditRowAtIndexPathHandler)(NSIndexPath *indexPath, id object);
 
-@interface CVTableViewArrayDataSource : NSObject <UITableViewDataSource, UITableViewDelegate>
+@interface CVArrayTableViewController : UITableViewController
 
 ///@brief Set this to an array of NSStrings for the section titles
 ///@discussion Setting this changes the expectations to what is in the objects array.
@@ -46,12 +39,6 @@ typedef BOOL(^CVCanEditRowAtIndexPathHandler)(NSIndexPath *indexPath, id object)
 
 ///@brief Called if the data source supports editing and the user deleted a row.
 @property (nonatomic, copy) CVTableViewRowAtIndexPathHandler didDeleteRowHandler;
-
-- (instancetype)initWithTableView:(UITableView *)tableView;
-
-///@param objects Passing a mutable array makes the table view data source support deletion of rows.
-///@discussion Override objectsAreEditable if this automatic behavior is not wanted.
-- (instancetype)initWithTableView:(UITableView *)tableView objects:(NSArray *)objects;
 
 - (void)reloadVisibleCells;
 

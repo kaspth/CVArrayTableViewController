@@ -1,46 +1,13 @@
-//
-//  CVTableViewArrayDataSource.m
-//
-//  Created by Kasper Timm on 11/09/13.
-//  Copyright (c) 2013 Kasper Timm Hansen. All rights reserved.
-//
+#import "CVArrayTableViewController.h"
 
-#import "CVTableViewArrayDataSource.h"
+@implementation CVArrayTableViewController
 
-@interface CVTableViewArrayDataSource ()
+#pragma mark - CVArrayTableViewController
 
-@property (nonatomic, strong) UITableView *tableView;
-
-@end
-
-@implementation CVTableViewArrayDataSource
-
-- (instancetype)initWithTableView:(UITableView *)tableView
+- (BOOL)hideHeadersForEmptySections
 {
-    return [self initWithTableView:tableView objects:nil];
+    return _hideHeadersForEmptySections ?: (_hideHeadersForEmptySections = NO);
 }
-
-- (instancetype)initWithTableView:(UITableView *)tableView objects:(NSArray *)objects
-{
-    self = [super init];
-    if (!self) return nil;
-
-    self.tableView = tableView;
-    self.tableView.dataSource = self;
-    self.tableView.delegate = self;
-    self.objects = objects;
-
-    self.hideHeadersForEmptySections = NO;
-
-    return self;
-}
-
-- (instancetype)initWithTableView:(UITableView *)tableView editableObjects:(NSMutableArray *)editableObjects
-{
-    return [self initWithTableView:tableView objects:editableObjects];
-}
-
-#pragma mark -
 
 - (BOOL)objectsAreEditable
 {
