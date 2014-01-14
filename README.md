@@ -1,6 +1,6 @@
-## CVTableViewArrayDataSource
+## CVArrayTableViewController 
 
-`CVTableViewArrayDataSource` is reusable data source and delegate for `UITableView`.
+`CVArrayTableViewController` is reusable data source and delegate for `UITableView`.
 
 ## Usage
 
@@ -8,29 +8,36 @@ Add the dependency to your `Podfile`:
 
 ```ruby
 platform :ios
-pod 'CVTableViewArrayDataSource'
+pod 'CVArrayTableViewController'
 ...
 ```
 
 Run `pod install` to install the dependencies.
 
-Create an instance of `CVTableViewArrayDataSource` with a reference to your table view. Set `cellIdentifier` and `cellConfigurationHandler`. 
-
-(Remember to have a strong reference to your instance, `UITableView` doesn't retain dataSources or delegates.)
+Subclass `CVTableViewArrayDataSource`. Set or override `objects`, `cellIdentifier` and `cellConfigurationHandler`. 
 
 Like this:
 
 ```objc
-  #import "CVTableViewArrayDataSource.h"
+  #import "CVArrayTableViewController.h"
   
   ...
+  @interface Subclass : CVArrayTableViewController
+  @end
+
+  // in your .m file:
+  - (NSArray *)objects
+  {
+      return @[@"A cat", @"A hat", @"And", @"A band"];
+  }
   
-  self.tableViewDataSource = [[CVTableViewArrayDataSource alloc] initWithTableView:self.tableView objects:@[@"A cat", @"A hat", @"And", @"A band"]];
-  
-  self.tableViewDataSource.cellIdentifier = @"UniqueCellIdentifier";
-  self.tableViewDataSource.cellConfigurationHandler = ^(UITableViewCell *cell, NSString *title) {
-      cell.textLabel.text = title;
-  };
+  - (void)viewDidLoad
+  {
+      self.tableViewDataSource.cellIdentifier = @"UniqueCellIdentifier";
+      self.tableViewDataSource.cellConfigurationHandler = ^(UITableViewCell *cell, NSString *title) {
+          cell.textLabel.text = title;
+      };
+  }
 ```
 
 Notice the `NSString *title` above. The objects in the array are automatically passed to your `cellConfigurationHandler` as an id.
