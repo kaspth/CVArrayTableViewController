@@ -35,9 +35,10 @@ typedef BOOL(^CVCanEditRowAtIndexPathHandler)(NSIndexPath *indexPath, id object)
 ///@discussion Set to NO if data source shouldn't support editing.
 @property (nonatomic) BOOL objectsAreEditable;
 
+///@brief Called if objectsAreEditable is YES and the user about to edit a row, e.g. swiping reveal delete button.
 @property (nonatomic, copy) CVCanEditRowAtIndexPathHandler canEditRowHandler;
 
-///@brief Called if the data source supports editing and the user deleted a row.
+///@brief Called if objectsAreEditable is YES and the user deleted a row.
 @property (nonatomic, copy) CVTableViewRowAtIndexPathHandler didDeleteRowHandler;
 
 - (void)reloadVisibleCells;
