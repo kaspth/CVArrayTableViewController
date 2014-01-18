@@ -53,21 +53,25 @@
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.objectsAreEditable && self.canEditRowHandler)
+    if (!self.objectsAreEditable)
+        return NO;
+
+    if (self.canEditRowHandler)
         return self.canEditRowHandler(indexPath, [self objectForIndexPath:indexPath]);
     
-    return NO;
+    return YES;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (editingStyle != UITableViewCellEditingStyleDelete && !self.didDeleteRowHandler)
+    if (editingStyle != UITableViewCellEditingStyleDelete)
         return;
     
     id object = [self removeObjectAtIndexPath:indexPath];
     [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-    
-    self.didDeleteRowHandler(indexPath, object);
+
+    if (self.didDeleteRowHandler)
+        self.didDeleteRowHandler(indexPath, object);
 }
 
 #pragma mark - UITableViewDelegate
