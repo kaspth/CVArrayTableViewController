@@ -21,6 +21,28 @@
     [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
 }
 
+#pragma mark -
+
+- (void)appendRowWithObject:(id)object
+{
+    [self appendRowToSection:0 withObject:object];
+}
+
+- (void)appendRowToSection:(NSUInteger)section withObject:(id)object
+{
+    [self insertRowAtIndexPath:[self appendRowIndexPathForSection:section] withBackingObject:object];
+}
+
+- (void)prependRowWithObject:(id)object
+{
+    [self prependRowToSection:0 withObject:object];
+}
+
+- (void)prependRowToSection:(NSUInteger)section withObject:(id)object
+{
+    [self insertRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] withBackingObject:object];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -106,6 +128,30 @@
     [editableObjects removeObjectAtIndex:indexPath.row];
     
     return object;
+}
+
+- (BOOL)insertObject:(id)object atIndexPath:(NSIndexPath *)indexPath
+{
+    if (!object || !self.objectsAreEditable)
+        return NO;
+
+    NSMutableArray *editableObjects = (NSMutableArray *)[self objectsForSectionIndex:indexPath.section];
+    if (indexPath.row > [editableObjects count])
+        return NO;
+
+    [editableObjects insertObject:object atIndex:indexPath.row];
+    return YES;
+}
+
+- (NSIndexPath *)appendRowIndexPathForSection:(NSUInteger)section
+{
+    return [NSIndexPath indexPathForRow:[[self objectsForSectionIndex:section] count] inSection:section];
+}
+
+- (void)insertRowAtIndexPath:(NSIndexPath *)indexPath withBackingObject:(id)object
+{
+    if ([self insertObject:object atIndexPath:indexPath])
+        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 - (UITableView *)shouldDequeueFromTableView:(UITableView *)tableView

@@ -43,4 +43,22 @@ typedef BOOL(^CVCanEditRowAtIndexPathHandler)(NSIndexPath *indexPath, id object)
 
 - (void)reloadVisibleCells;
 
+///@brief Appends object to the first section array and inserts the row last.
+/// Only if objectsAreEditable is YES.
+- (void)appendRowWithObject:(id)object;
+
+///@brief Appends object to the section array specified by section and inserts the row last.
+/// Only if objectsAreEditable is YES.
+///@param section The section to append the row to.
+- (void)appendRowToSection:(NSUInteger)section withObject:(id)object;
+
+///@brief Prepends object to the first section array and inserts the row first.
+/// Only if objectsAreEditable is YES.
+- (void)prependRowWithObject:(id)object;
+
+///@brief Prepends object to the section array specified by section and inserts the row first.
+/// Only if objectsAreEditable is YES.
+///@param section The section to prepend the row to.
+- (void)prependRowToSection:(NSUInteger)section withObject:(id)object;
+
 @end
