@@ -14,6 +14,11 @@
     return _objectsAreEditable ?: (_objectsAreEditable = [self.objects isKindOfClass:[NSMutableArray class]]);
 }
 
+- (BOOL)objectsAreMoveable
+{
+    return _objectsAreMoveable ?: (_objectsAreMoveable = YES);
+}
+
 #pragma mark -
 
 - (void)reloadVisibleCells
@@ -73,15 +78,14 @@
     return cell;
 }
 
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return [self allowOperationAtIndexPath:indexPath scopeProperty:self.objectsAreMoveable handler:self.canMoveRowHandler];
+}
+
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (!self.objectsAreEditable)
-        return NO;
-
-    if (self.canEditRowHandler)
-        return self.canEditRowHandler(indexPath, [self objectForIndexPath:indexPath]);
-    
-    return YES;
+    return [self allowOperationAtIndexPath:indexPath scopeProperty:self.objectsAreEditable handler:self.canEditRowHandler];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -94,6 +98,15 @@
 
     if (self.didDeleteRowHandler)
         self.didDeleteRowHandler(indexPath, object);
+}
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
+{
+    id object = [self removeObjectAtIndexPath:sourceIndexPath];
+    [self insertObject:object atIndexPath:destinationIndexPath];
+
+    if (self.didMoveRowHandler)
+        self.didMoveRowHandler(destinationIndexPath, object);
 }
 
 #pragma mark - UITableViewDelegate
@@ -117,6 +130,8 @@
 {
     return self.sections ? self.objects[section] : self.objects;
 }
+
+#pragma mark -
 
 - (id)removeObjectAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -143,6 +158,8 @@
     return YES;
 }
 
+#pragma mark -
+
 - (NSIndexPath *)appendRowIndexPathForSection:(NSUInteger)section
 {
     return [NSIndexPath indexPathForRow:[[self objectsForSectionIndex:section] count] inSection:section];
@@ -154,11 +171,22 @@
         [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
+#pragma mark -
+
 - (UITableView *)shouldDequeueFromTableView:(UITableView *)tableView
 {
     if (self.dequeueFromTableViewHandler)
         return self.dequeueFromTableViewHandler(tableView);
     return tableView;
+}
+
+#pragma mark -
+
+- (BOOL)allowOperationAtIndexPath:(NSIndexPath *)indexPath scopeProperty:(BOOL)scope handler:(CVBoolRowAtIndexPathHandler)handler
+{
+    if (scope && handler)
+        return handler(indexPath, [self objectForIndexPath:indexPath]);
+    return scope;
 }
 
 @end

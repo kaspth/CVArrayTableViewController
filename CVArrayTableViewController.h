@@ -3,7 +3,7 @@
 typedef void(^CVConfigureTableViewCellHandler)(id cell, id object);
 typedef void(^CVTableViewRowAtIndexPathHandler)(NSIndexPath *indexPath, id object);
 typedef UITableView *(^CVDequeueFromTableViewHandler)(UITableView *tableView);
-typedef BOOL(^CVCanEditRowAtIndexPathHandler)(NSIndexPath *indexPath, id object);
+typedef BOOL(^CVBoolRowAtIndexPathHandler)(NSIndexPath *indexPath, id object);
 
 @interface CVArrayTableViewController : UITableViewController
 
@@ -36,10 +36,21 @@ typedef BOOL(^CVCanEditRowAtIndexPathHandler)(NSIndexPath *indexPath, id object)
 @property (nonatomic) BOOL objectsAreEditable;
 
 ///@brief Called if objectsAreEditable is YES and the user about to edit a row, e.g. swiping reveal delete button.
-@property (nonatomic, copy) CVCanEditRowAtIndexPathHandler canEditRowHandler;
+@property (nonatomic, copy) CVBoolRowAtIndexPathHandler canEditRowHandler;
 
 ///@brief Called if objectsAreEditable is YES and the user deleted a row.
 @property (nonatomic, copy) CVTableViewRowAtIndexPathHandler didDeleteRowHandler;
+
+///@brief YES if all objects are moveable, NO otherwise. Default is YES.
+@property (nonatomic) BOOL objectsAreMoveable;
+
+///@brief Called if objectsAreMoveable is YES and the user tries to move a row.
+@property (nonatomic, copy) CVBoolRowAtIndexPathHandler canMoveRowHandler;
+
+///@brief Called if objectsAreMoveable is YES and the user moved a row.
+///@param indexPath The destination indexPath for object.
+///@param object The object that was moved.
+@property (nonatomic, copy) CVTableViewRowAtIndexPathHandler didMoveRowHandler;
 
 - (void)reloadVisibleCells;
 
