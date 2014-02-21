@@ -128,7 +128,10 @@
 
 - (NSArray *)objectsForSectionIndex:(NSInteger)section
 {
-    return self.sections ? self.objects[section] : self.objects;
+    if (self.sections && section < self.objects.count)
+        return self.objects[section];
+
+    return self.objects;
 }
 
 #pragma mark -
