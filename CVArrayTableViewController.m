@@ -170,8 +170,13 @@
 
 - (void)insertRowAtIndexPath:(NSIndexPath *)indexPath withBackingObject:(id)object
 {
-    if ([self insertObject:object atIndexPath:indexPath])
-        [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    if (![self insertObject:object atIndexPath:indexPath])
+        return;
+
+    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:self.insertionAnimationHandler ? UITableViewRowAnimationNone : UITableViewRowAnimationAutomatic];
+
+    if (self.insertionAnimationHandler)
+        self.insertionAnimationHandler([self.tableView cellForRowAtIndexPath:indexPath], object);
 }
 
 #pragma mark -

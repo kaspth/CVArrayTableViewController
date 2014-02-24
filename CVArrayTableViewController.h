@@ -4,6 +4,7 @@ typedef void(^CVConfigureTableViewCellHandler)(id cell, id object);
 typedef void(^CVTableViewRowAtIndexPathHandler)(NSIndexPath *indexPath, id object);
 typedef UITableView *(^CVDequeueFromTableViewHandler)(UITableView *tableView);
 typedef BOOL(^CVBoolRowAtIndexPathHandler)(NSIndexPath *indexPath, id object);
+typedef void(^CVCellAnimationHandler)(UITableViewCell *cell, id object);
 
 @interface CVArrayTableViewController : UITableViewController
 
@@ -51,6 +52,9 @@ typedef BOOL(^CVBoolRowAtIndexPathHandler)(NSIndexPath *indexPath, id object);
 ///@param indexPath The destination indexPath for object.
 ///@param object The object that was moved.
 @property (nonatomic, copy) CVTableViewRowAtIndexPathHandler didMoveRowHandler;
+
+///@brief Called when a row is about to be inserted in the tableView.
+@property (nonatomic, copy) CVCellAnimationHandler insertionAnimationHandler;
 
 - (void)reloadVisibleCells;
 
