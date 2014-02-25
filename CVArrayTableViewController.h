@@ -76,4 +76,8 @@ typedef void(^CVCellAnimationHandler)(UITableViewCell *cell, id object);
 ///@param section The section to prepend the row to.
 - (void)prependRowToSection:(NSUInteger)section withObject:(id)object;
 
+///@brief Reloads row for the object found via predicate if objectsAreEditable is YES.
+///@return YES if row existed and was reloaded, NO otherwise.
+- (BOOL)reloadRowInSection:(NSUInteger)section withObject:(id)object forObjectPassingTest:(BOOL(^)(id obj, NSUInteger idx, BOOL *stop))predicate;
+
 @end

@@ -48,6 +48,26 @@
     [self insertRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:section] withBackingObject:object];
 }
 
+#pragma mark -
+
+- (BOOL)reloadRowInSection:(NSUInteger)section withObject:(id)object forObjectPassingTest:(BOOL(^)(id obj, NSUInteger idx, BOOL *stop))predicate;
+{
+    if (!self.objectsAreEditable)
+        return NO;
+
+    NSUInteger rowIndex = [[self objectsForSectionIndex:section] indexOfObjectPassingTest:predicate];
+    if (rowIndex == NSNotFound)
+        return YES;
+
+    [(NSMutableArray *)[self objectsForSectionIndex:section] replaceObjectAtIndex:rowIndex withObject:object];
+
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:section];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:[self rowAnimationBasedOnInsertionAnimationHandler]];
+    self.insertionAnimationHandler([self.tableView cellForRowAtIndexPath:indexPath], object);
+
+    return YES;
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -121,6 +141,11 @@
 
 #pragma mark - Private
 
+- (UITableViewRowAnimation)rowAnimationBasedOnInsertionAnimationHandler
+{
+    return self.insertionAnimationHandler ? UITableViewRowAnimationNone : UITableViewRowAnimationAutomatic;
+}
+
 - (id)objectForIndexPath:(NSIndexPath *)indexPath
 {
     return [self objectsForSectionIndex:indexPath.section][indexPath.row];
@@ -173,7 +198,7 @@
     if (![self insertObject:object atIndexPath:indexPath])
         return;
 
-    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:self.insertionAnimationHandler ? UITableViewRowAnimationNone : UITableViewRowAnimationAutomatic];
+    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:[self rowAnimationBasedOnInsertionAnimationHandler]];
 
     if (self.insertionAnimationHandler)
         self.insertionAnimationHandler([self.tableView cellForRowAtIndexPath:indexPath], object);
