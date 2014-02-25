@@ -63,7 +63,8 @@
 
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:rowIndex inSection:section];
     [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:[self rowAnimationBasedOnInsertionAnimationHandler]];
-    self.insertionAnimationHandler([self.tableView cellForRowAtIndexPath:indexPath], object);
+    if (self.insertionAnimationHandler)
+        self.insertionAnimationHandler([self.tableView cellForRowAtIndexPath:indexPath], object);
 
     return YES;
 }
