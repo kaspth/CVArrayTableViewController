@@ -57,7 +57,7 @@
 
     NSUInteger rowIndex = [[self objectsForSectionIndex:section] indexOfObjectPassingTest:predicate];
     if (rowIndex == NSNotFound)
-        return YES;
+        return NO;
 
     [(NSMutableArray *)[self objectsForSectionIndex:section] replaceObjectAtIndex:rowIndex withObject:object];
 
