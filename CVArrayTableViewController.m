@@ -21,13 +21,6 @@
 
 #pragma mark -
 
-- (void)reloadVisibleCells
-{
-    [self.tableView reloadRowsAtIndexPaths:[self.tableView indexPathsForVisibleRows] withRowAnimation:UITableViewRowAnimationNone];
-}
-
-#pragma mark -
-
 - (void)appendRowWithObject:(id)object
 {
     [self appendRowToSection:0 withObject:object];

@@ -56,8 +56,6 @@ typedef void(^CVCellAnimationHandler)(UITableViewCell *cell, id object);
 ///@brief Called when a row is about to be inserted in the tableView.
 @property (nonatomic, copy) CVCellAnimationHandler insertionAnimationHandler;
 
-- (void)reloadVisibleCells;
-
 ///@brief Appends object to the first section array and inserts the row last.
 /// Only if objectsAreEditable is YES.
 - (void)appendRowWithObject:(id)object;
