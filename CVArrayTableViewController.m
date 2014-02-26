@@ -50,7 +50,7 @@
 
 #pragma mark -
 
-- (BOOL)reloadRowInSection:(NSUInteger)section withObject:(id)object forObjectPassingTest:(BOOL(^)(id obj, NSUInteger idx, BOOL *stop))predicate;
+- (BOOL)reloadRowInSection:(NSUInteger)section withObject:(id)object passingTest:(BOOL(^)(id obj, NSUInteger idx, BOOL *stop))predicate;
 {
     if (!self.objectsAreEditable)
         return NO;
