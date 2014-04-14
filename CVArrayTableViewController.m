@@ -134,6 +134,25 @@
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+- (BOOL)tableView:(UITableView *)tableView shouldShowMenuForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return !!self.stringForCopyHandler;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    return action == @selector(copy:);
+}
+
+- (void)tableView:(UITableView *)tableView performAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    if (action != @selector(copy:)) return;
+
+    id object = [self objectForIndexPath:indexPath];
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    [UIPasteboard generalPasteboard].string = self.stringForCopyHandler(cell, object);
+}
+
 #pragma mark - Private
 
 - (UITableViewRowAnimation)rowAnimationBasedOnInsertionAnimationHandler

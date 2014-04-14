@@ -5,6 +5,7 @@ typedef void(^CVTableViewRowAtIndexPathHandler)(NSIndexPath *indexPath, id objec
 typedef UITableView *(^CVDequeueFromTableViewHandler)(UITableView *tableView);
 typedef BOOL(^CVBoolRowAtIndexPathHandler)(NSIndexPath *indexPath, id object);
 typedef void(^CVCellAnimationHandler)(UITableViewCell *cell, id object);
+typedef NSString *(^CVStringCopyHandler)(id cell, id object);
 
 @interface CVArrayTableViewController : UITableViewController
 
@@ -55,6 +56,10 @@ typedef void(^CVCellAnimationHandler)(UITableViewCell *cell, id object);
 
 ///@brief Called when a row is about to be inserted in the tableView.
 @property (nonatomic, copy) CVCellAnimationHandler insertionAnimationHandler;
+
+///@brief Called when the user taps a copy menu item.
+///@return The string to be added to the general pasteboard.
+@property (nonatomic, copy) CVStringCopyHandler stringForCopyHandler;
 
 ///@brief Appends object to the first section array and inserts the row last.
 /// Only if objectsAreEditable is YES.
